@@ -26,6 +26,8 @@ You know some React.
 
 You've probably heard of Hooks, but you want to know more about them.
 
+_TODO: maybe link to docs_
+
 ---
 
 # The Heck Are Hooks?
@@ -57,7 +59,17 @@ const [state, setState] = useState(initialState);
 
 ---
 
-# useState Example
+# useState - Class Example
+
+_TODO: insert React class example of this_
+
+_TODO: render component side by side_
+
+---
+
+# useState - Hooks Example
+
+_TODO: render component side by side_
 
 ```jsx
 import React, { useState } from "react";
@@ -79,7 +91,73 @@ function Counter({ initialCount }) {
 
 # useEffect
 
-- when do it run
+A place to put side effects like mutations, fetching, subscriptions, timers, and logging.
+
+Runs after every component render. Replacing class lifecycle methods.
+
+```
+useEffect(() => {
+  // do this thing after render
+})
+```
+
+---
+
+# useEffect - Class Example
+
+```
+
+```
+
+---
+
+# useEffect - Hooks Example
+
+```jsx
+import React, {useEffect} from "react";
+
+function Page({loggedIn, children}) {
+
+  useEffect(() => {
+    if (loggedIn) {
+      document.title = "Online";
+    }
+  }, [loggedIn])
+
+  return (
+    <div>
+      {children}
+    </div>
+  );
+}
+```
+
+---
+
+# useEffect - Fetch Example
+
+```jsx
+import React, {useEffect} from "react";
+
+function CharacterList() {
+  
+  const [characters, setCharacters] = useState([]);
+  
+  useEffect(() => {
+    fetch("url").then(data =>
+      setCharacters(data);
+    )}
+  })
+
+  return (
+    <div>
+      {characters.map(character => (
+        <div>{character.name}</div>
+      ))}
+    </div>
+  );
+}
+```
 
 ---
 
