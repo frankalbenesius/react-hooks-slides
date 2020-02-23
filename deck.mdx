@@ -114,35 +114,34 @@ useEffect(() => {
 # useEffect - Hooks Example
 
 ```jsx
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 
-function Page({loggedIn, children}) {
-
+function Page({ loggedIn, children }) {
   useEffect(() => {
     if (loggedIn) {
       document.title = "Online";
     }
-  }, [loggedIn])
+  }, [loggedIn]);
 
-  return (
-    <div>
-      {children}
-    </div>
-  );
+  return <div>{children}</div>;
 }
 ```
 
 ---
 
-# useEffect - Fetch Example
+# useEffect - Fetch with Class
+
+---
+
+# useEffect - Fetch with Hook
 
 ```jsx
 import React, {useEffect} from "react";
 
 function CharacterList() {
-  
+
   const [characters, setCharacters] = useState([]);
-  
+
   useEffect(() => {
     fetch("url").then(data =>
       setCharacters(data);
@@ -163,38 +162,97 @@ function CharacterList() {
 
 # useReducer
 
-- show with context
+An alternative to useState. Accepts a reducer and returns the current state paired with a dispatch method.
+
+```jsx
+const [state, dispatch] = useReducer(reducer, initialState);
+```
 
 ---
 
-# but what if it were deeper?!
+# useReducer Example
+
+```jsx
+const initialState = { count: 0 };
+
+function reducer(state, action) {
+  switch (action.type) {
+    case "increment":
+      return { count: state.count + 1 };
+    case "decrement":
+      return { count: state.count - 1 };
+    default:
+      throw new Error();
+  }
+}
+
+function Counter() {
+  const [state, dispatch] = useReducer(reducer, initialState);
+  return (
+    <>
+      Count: {state.count}
+      <button onClick={() => dispatch({ type: "decrement" })}>-</button>
+      <button onClick={() => dispatch({ type: "increment" })}>+</button>
+    </>
+  );
+}
+```
+
+---
+
+# Wait!
+
+This looks a lot like Redux... ?
 
 ---
 
 # useContext
 
-- combine with reducer
-- how can i use this to avoid deeply nested state & passing callbacks down?
-  https://reactjs.org/docs/hooks-faq.html#how-to-avoid-passing-callbacks-down
+Accepts a context object and returns the current context value for that context.
+
+```jsx
+const MyContext = React.createContext("some value");
+
+// and then, in a function component:
+const value = useContext(MyContext); // "some value"
+```
+
+---
+
+# Can Replace Redux
+
+useContext combined with useReducer makes a pseudo-redux.
+
+TODO: link to code sandbox with deeply nested dispatch context
 
 ---
 
 # Writing Custom Hooks
 
----
+Intra-component logic is now composable.
 
-# other hooks
-
-- useCallback
-- useMemo
-- etc
+todo: an example that shows how a set of a few hooks could be abstracted and packaged together into their own, more meaningful hook
 
 ---
 
-# FAQs
+# 3rd Party Hooks
 
-- performance
--
+NPM ain't just for components anymore.
+
+TODO: gif
+
+- useDebounce
+- useMedia? // find better example
+- useSWR // or not zeit version
+
+---
+
+# Final Thoughts
+
+- Other hooks exist:
+  - useCallback
+  - useMemo
+  - etc
 
 ---
 
