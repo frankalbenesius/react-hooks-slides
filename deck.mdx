@@ -1,15 +1,21 @@
 import HelloExample from "./components/HelloExample";
 import { themes, Split } from "mdx-deck";
-
+console.log(themes.swiss);
 export const theme = {
   ...themes.swiss,
-  ...themes.prism
+  ...themes.prism,
+  styles: {
+    ...themes.swiss.styles,
+    code: {
+      ...themes.swiss.styles.code,
+      fontSize: "1.5rem"
+    }
+  }
 };
 
 # React Hooks
 
 a Lunch & Learn
-
 by Katie & Frank
 
 ---
@@ -43,7 +49,31 @@ Hooks provide one way of avoiding these annoyances.
 
 # useState
 
-- code example
+Returns a stateful value, and a function to update it.
+
+```jsx
+const [state, setState] = useState(initialState);
+```
+
+---
+
+# useState Example
+
+```jsx
+import React, { useState } from "react";
+
+function Counter({ initialCount }) {
+  const [count, setCount] = useState(initialCount);
+  return (
+    <div>
+      Count: {count}
+      <button onClick={() => setCount(initialCount)}>Reset</button>
+      <button onClick={() => setCount(prevCount => prevCount - 1)}>-</button>
+      <button onClick={() => setCount(prevCount => prevCount + 1)}>+</button>
+    </div>
+  );
+}
+```
 
 ---
 
@@ -68,6 +98,10 @@ Hooks provide one way of avoiding these annoyances.
 - combine with reducer
 - how can i use this to avoid deeply nested state & passing callbacks down?
   https://reactjs.org/docs/hooks-faq.html#how-to-avoid-passing-callbacks-down
+
+---
+
+# Writing Custom Hooks
 
 ---
 
