@@ -1,5 +1,5 @@
-import { themes, Split } from "mdx-deck";
-console.log(themes.swiss);
+import { themes, Split, Notes } from "mdx-deck";
+
 export const theme = {
   ...themes.swiss,
   ...themes.prism,
@@ -7,12 +7,12 @@ export const theme = {
     ...themes.swiss.styles,
     code: {
       ...themes.swiss.styles.code,
-      fontSize: "1.5rem"
+      fontSize: "1.4rem"
     }
   }
 };
 
-import {RoomAvailable, RoomAvailableHook, TwoOneSplit} from "./components";
+import { RoomAvailable, RoomAvailableHook, TwoOneSplit } from "./components";
 
 # React Hooks
 
@@ -27,8 +27,6 @@ You know some React.
 
 You've probably heard of Hooks, but you want to know more about them.
 
-_...insert-gif_
-
 ---
 
 # The Heck Are Hooks?
@@ -42,8 +40,10 @@ They let you use state and other React features without writing a class.
 # Why do they exist?
 
 Sometimes React is annoying:
-  - complicated & long class components
-  - complicated patterns like "Render Props"
+
+- complicated & long class components
+- complicated patterns like "Render Props"
+- switching between class & function components
 
 They also can make code more "reusable".
 
@@ -59,12 +59,9 @@ const [state, setState] = useState(initialState);
 
 ---
 
-### useState - without hooks
-
-<TwoOneSplit>
-
 ```jsx
-class Room extends React.Component {
+// before useState hook
+export class RoomAvailable extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -74,9 +71,8 @@ class Room extends React.Component {
   render() {
     return (
       <div>
-        <div>{this.state.isAvailable ? "OPEN" : "Not Available}</div>
-        <button
-          onClick={() => this.setState({ isAvailable: false })}>
+        <div>{this.state.isAvailable ? "OPEN" : "Not Available"}</div>
+        <button onClick={() => this.setState({ isAvailable: false })}>
           Book
         </button>
       </div>
@@ -85,113 +81,113 @@ class Room extends React.Component {
 }
 ```
 
-<RoomAvailable room={{isAvailable: true}} />
-
-</TwoOneSplit>
-
 ---
 
-### useState - with hook
-
-<TwoOneSplit>
-
 ```jsx
+// after useState hook
 import React, { useState } from "react";
 
-function RoomAvailableHook ({room}) {
+function RoomAvailable({ room }) {
   const [isAvailable, setIsAvailable] = useState(room.isAvailable);
 
   return (
     <div>
       <div>{isAvailable ? "OPEN" : "Not Available"}</div>
-        <button onClick={() => setIsAvailable(false)}>
-            Book
-        </button>
+      <button onClick={() => setIsAvailable(false)}>Book</button>
     </div>
   );
 }
 ```
-
-<RoomAvailableHook room={{isAvailable: true}} />
-
-</TwoOneSplit>
 
 ---
 
 # useEffect
 
-A place to put side effects like mutations, fetching, subscriptions, timers, and logging.
+A place to put side effects like mutations, fetching, subscriptions, timers, etc.
 
-Runs after every component render. Replacing class lifecycle methods.
+Runs after every component render. Replaces class lifecycle methods.
 
 ```jsx
 useEffect(() => {
   // do this thing after render
-})
+});
 ```
 
 ---
 
-### useEffect - without hooks
-
-<TwoOneSplit>
 ```jsx
-const () =>
-```
-<div></div>
+// updating the document title
+// before useEffect hook
+import React from "react";
 
-</TwoOneSplit>
+export class RoomPage extends React.Component {
+  componentDidUpdate() {
+    document.title = this.props.room.name;
+  }
+  render() {
+    return <div>{props.children}</div>;
+  }
+}
+```
 
 ---
 
-### useEffect - with hook
-
 ```jsx
+// updating the document title
+// after useEffect hook
 import React, { useEffect } from "react";
 
-function Page({ selectedRoom, children }) {
+function RoomPage({ room, children }) {
   useEffect(() => {
-    if (loggedIn) {
-      document.title = "Online";
-    }
-  }, [loggedIn]);
+    document.title = room.name;
+  }, [room]);
 
   return <div>{children}</div>;
 }
 ```
 
----
-
-# useEffect - Fetch with Class
+<Notes>Notice dependency array.</Notes>
 
 ---
-
-# useEffect - Fetch with Hook
-
-_TODO: replace with fetching rooms_
 
 ```jsx
-import React, {useEffect} from "react";
+// fetching data on mount
+// before useEffect hook
+export class RoomList extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      rooms: []
+    };
+  }
+  componentDidMount() {
+    fetch("/api/rooms").then(rooms => {
+      this.setState({ rooms });
+    });
+  }
 
-function CharacterList() {
-
-  const [characters, setCharacters] = useState([]);
-
-  useEffect(() => {
-    fetch("url").then(data =>
-      setCharacters(data);
-    )}
-  })
-
-  return (
-    <div>
-      {characters.map(character => (
-        <div>{character.name}</div>
-      ))}
-    </div>
-  );
+  // render room list...
 }
 ```
+
+---
+
+```jsx
+// fetching data on mount
+// after useEffect hook
+function RoomList() {
+  const [rooms, setRooms] = useState([]);
+  useEffect(() => {
+    fetch("/api/rooms").then(rooms => {
+      setRooms(rooms);
+    });
+  }, []);
+
+  // render room list...
+}
+```
+
+<Notes>Notice how you can group code with shared purpose.</Notes>
 
 ---
 
@@ -199,10 +195,19 @@ function CharacterList() {
 
 Intra-component logic is now composable.
 
-todo: an example that shows how a set of a few hooks could be abstracted and packaged together into their own, more meaningful hook
+```jsx
+function useRooms() {
+  const [rooms, setRooms] = useState([]);
+  useEffect(() => {
+    fetch("/api/rooms").then(rooms => {
+      setRooms(rooms);
+    });
+  }, []);
+  return rooms;
+}
 
-_TODO: maybe move after useEffect & before useReducer or useContext_
-
+// useRooms hook can be used by RoomList component
+```
 
 ---
 
@@ -216,39 +221,28 @@ const [state, dispatch] = useReducer(reducer, initialState);
 
 ---
 
-# useReducer Example
-
 ```jsx
-const initialState = { count: 0 };
-
 function reducer(state, action) {
   switch (action.type) {
     case "increment":
-      return { count: state.count + 1 };
+      return state + 1;
     case "decrement":
-      return { count: state.count - 1 };
+      return state - 1;
     default:
       throw new Error();
   }
 }
-
 function Counter() {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(reducer, 0);
   return (
-    <>
+    <div>
       Count: {state.count}
       <button onClick={() => dispatch({ type: "decrement" })}>-</button>
       <button onClick={() => dispatch({ type: "increment" })}>+</button>
-    </>
+    </div>
   );
 }
 ```
-
----
-
-# Wait!
-
-This looks a lot like Redux... ?
 
 ---
 
@@ -265,14 +259,42 @@ const value = useContext(MyContext); // "some value"
 
 ---
 
-# Can Replace Redux
+```jsx
+// import your context
+import { RoomsState } from "../RoomsContext";
 
-useContext combined with useReducer makes a pseudo-redux.
+// useContext from a component
+function RoomCount() {
+  const rooms = useContext(RoomsState);
+  return <div>{rooms.length}</div>;
+}
 
-TODO: link to code sandbox with deeply nested dispatch context
+// useContext from a hook
+function useRoomsCount() {
+  const rooms = useContext(RoomsState);
+  return rooms.length;
+}
+```
 
-_TODO: maybe talk about rooms & room events COULD be in a global store_
+---
 
+# useRedux (kind of)
+
+`useContext` combined with `useReducer` makes a pseudo-redux.
+
+```jsx
+import {RoomsState, RoomsDispatch} from "../RoomsContext";
+
+function RoomsList() {
+  // we can access both the state and the dispatch function
+  const rooms = useContext(RoomsState);
+  const dispatch = useContext(RoomsDispatch);
+
+  ...
+}
+```
+
+<Notes>Demo app with light/dark mode.</Notes>
 
 ---
 
@@ -280,21 +302,17 @@ _TODO: maybe talk about rooms & room events COULD be in a global store_
 
 NPM ain't just for components anymore.
 
-TODO: gif
-
-- useDebounce
-- useMedia? // find better example
-- useSWR // or not zeit version
+- easy debouncing with [useDebounce](https://github.com/xnimorz/use-debounce)
+- css media queries with [useMedia](https://github.com/streamich/use-media)
+- smart data fetching with [react-query](https://github.com/tannerlinsley/react-query) and [swr](https://github.com/zeit/swr)
 
 ---
 
-# Final Thoughts
+# Thank You
 
-- Other hooks exist:
-  - useCallback
-  - useMemo
-  - etc
+Resources:
 
----
-
-## The End
+- [Introducing Hooks](https://reactjs.org/docs/hooks-intro.html)
+  - Highly recommend watching the video introduction.
+- [Hooks API Reference](https://reactjs.org/docs/hooks-reference.html)
+- [Hooks FAQ](https://reactjs.org/docs/hooks-faq.html)
