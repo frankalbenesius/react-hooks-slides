@@ -14,22 +14,29 @@ export const theme = {
 
 import { RoomAvailable, RoomAvailableHook, TwoOneSplit } from "./components";
 
-# React Hooks
+# Outclassed
+
+## An Introduction to React Hooks
 
 a Lunch & Learn
 by Katie & Frank
 
 ---
 
-# Who Is This For?
+# Who is this for?
 
 You know some React.
 
 You've probably heard of Hooks, but you want to know more about them.
 
+<img
+  style={{ height: "auto", maxWidth: "30rem" }}
+  src="https://media.giphy.com/media/B4ZgcoPTHYXL2/giphy.gif"
+/>
+
 ---
 
-# The Heck Are Hooks?
+# The heck are hooks?
 
 They are functions.
 
@@ -50,6 +57,8 @@ They also can make code more "reusable".
 ---
 
 # useState
+
+_Basic Hook #1 of 3_
 
 Returns a stateful value, and a function to update it.
 
@@ -102,6 +111,8 @@ function RoomAvailable({ room }) {
 ---
 
 # useEffect
+
+_Basic Hook #2 of 3_
 
 A place to put side effects like mutations, fetching, subscriptions, timers, etc.
 
@@ -211,9 +222,53 @@ function useRooms() {
 
 ---
 
+# Demo
+
+[`useTimeStr`](https://github.com/frankalbenesius/conference-room-availability/blob/master/src/hooks/useTimeStr.js) - returns a self-updating current time string
+
+[`useRooms`](https://github.com/frankalbenesius/conference-room-availability/blob/master/src/hooks/useRooms.js) - returns a fetched list of rooms
+
+---
+
+# useContext
+
+_Basic Hook #3 of 3_
+
+Accepts a context object and returns the current context value for that context.
+
+```jsx
+const MyContext = React.createContext("some value");
+
+// and then, in a function component:
+const value = useContext(MyContext); // "some value"
+```
+
+---
+
+```jsx
+// import your context
+import { RoomsState } from "../RoomsContext";
+
+// useContext from a component
+function RoomCount() {
+  const rooms = useContext(RoomsState);
+  return <div>{rooms.length}</div>;
+}
+
+// useContext from a hook
+function useRoomsCount() {
+  const rooms = useContext(RoomsState);
+  return rooms.length;
+}
+```
+
+---
+
 # useReducer
 
-An alternative to useState. Accepts a reducer and returns the current state paired with a dispatch method.
+_An alternative to useState. _
+
+Accepts a reducer and returns the current state paired with a dispatch method.
 
 ```jsx
 const [state, dispatch] = useReducer(reducer, initialState);
@@ -246,38 +301,6 @@ function Counter() {
 
 ---
 
-# useContext
-
-Accepts a context object and returns the current context value for that context.
-
-```jsx
-const MyContext = React.createContext("some value");
-
-// and then, in a function component:
-const value = useContext(MyContext); // "some value"
-```
-
----
-
-```jsx
-// import your context
-import { RoomsState } from "../RoomsContext";
-
-// useContext from a component
-function RoomCount() {
-  const rooms = useContext(RoomsState);
-  return <div>{rooms.length}</div>;
-}
-
-// useContext from a hook
-function useRoomsCount() {
-  const rooms = useContext(RoomsState);
-  return rooms.length;
-}
-```
-
----
-
 # useRedux (kind of)
 
 `useContext` combined with `useReducer` makes a pseudo-redux.
@@ -294,7 +317,12 @@ function RoomsList() {
 }
 ```
 
-<Notes>Demo app with light/dark mode.</Notes>
+---
+
+# Demo
+
+[`useReducer + useContext`](https://github.com/frankalbenesius/conference-room-availability/blob/master/src/components/DarkModeProvider.js) - for a "dark mode" context
+[`useRoomAvailability`](https://github.com/frankalbenesius/conference-room-availability/blob/master/src/hooks/useRoomAvailability.js) - a custom hook that uses another custom hook
 
 ---
 
@@ -316,4 +344,5 @@ Resources:
   - Highly recommend watching the video introduction.
 - [Hooks API Reference](https://reactjs.org/docs/hooks-reference.html)
 - [Hooks FAQ](https://reactjs.org/docs/hooks-faq.html)
+- [awesome-react-hooks](https://github.com/rehooks/awesome-react-hooks)
 - [Rooms App Codebase](https://github.com/frankalbenesius/conference-room-availability)
