@@ -33,6 +33,11 @@ You've probably heard of Hooks, but you want to know more about them.
   style={{ height: "auto", maxWidth: "30rem" }}
   src="https://media.giphy.com/media/B4ZgcoPTHYXL2/giphy.gif"
 />
+<Notes>
+  <p>Katie's Experience: Before Apollo</p>
+  <p>Katie's Experience: During Apollo</p>
+  <p>Questions - please ask, we can open a code sandbox</p>
+</Notes>
 
 ---
 
@@ -41,6 +46,8 @@ You've probably heard of Hooks, but you want to know more about them.
 They are functions.
 
 They let you use state and other React features without writing a class.
+
+<Notes>Frank</Notes>
 
 ---
 
@@ -54,6 +61,28 @@ Sometimes React is annoying:
 
 They also can make code more "reusable".
 
+<Notes>
+  <p>Frank</p>
+  <p>takeaway: avoid using classes</p>
+  <p>i haven't written a class in over a year</p>
+  <p>a smoother developer experience</p>
+</Notes>
+
+---
+
+# The Hooks
+
+React provides some hooks.
+
+We will be showing the 3 basic hooks.
+
+But you can write your own, too.
+
+<Notes>
+  <p>Pattern will be: introduce a hook, show before and after</p>
+  <p>Context will be <a href="https://rooms.frank.dev">room status app</a></p>
+</Notes>
+
 ---
 
 # useState
@@ -65,6 +94,11 @@ Returns a stateful value, and a function to update it.
 ```jsx
 const [state, setState] = useState(initialState);
 ```
+
+<Notes>
+  <p>React state without a class.</p>
+  <p>Each piece of state has it's own setter.</p>
+</Notes>
 
 ---
 
@@ -90,6 +124,11 @@ export class RoomAvailable extends React.Component {
 }
 ```
 
+<Notes>
+  <p>Our examples involve room availability</p>
+  <p>What does this do?</p>
+</Notes>
+
 ---
 
 ```jsx
@@ -107,6 +146,13 @@ function RoomAvailable({ room }) {
   );
 }
 ```
+
+<Notes>
+  <p>Katie's initial confusion</p>
+  <p>Initial reactions, questions?</p>
+  <p>you could create multiple states here</p>
+  <p>how this works in typescript?</p>
+</Notes>
 
 ---
 
